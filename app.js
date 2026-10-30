@@ -608,7 +608,20 @@ if (!standalone && /iphone|ipad|ipod/i.test(navigator.userAgent) && !localStorag
 }
 
 /* ---------- boot ---------- */
-if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      reg.update().catch(() => {});
+    }).catch(() => {});
+  });
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!refreshing) {
+      refreshing = true;
+      window.location.reload();
+    }
+  });
+}
 // refresh when the day rolls over or the app returns to foreground
 let lastDay = today();
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { updateClock(); if (today() !== lastDay) { lastDay = today(); render(); } checkReminder(); } });
