@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Maqsad — Goals, Tasks & Habits</title>
+<meta name="description" content="Maqsad: Free, offline-first personal goal tracker, daily task manager, habit streaks and deep schedule organizer. No server, 100% private.">
+<meta name="theme-color" content="#059669">
+<meta property="og:title" content="Maqsad — Goals, Tasks & Habits">
+<meta property="og:description" content="Personal goal tracker, daily task manager and habit tracker. 100% free and works offline.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="icons/icon-512.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Maqsad — Goals, Tasks & Habits">
+<meta name="twitter:description" content="Personal goal tracker, daily task manager and habit tracker. Works offline.">
+<meta name="twitter:image" content="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Maqsad">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div>
+      <div class="hello" id="hello"></div>
+      <div class="date" id="dateLine"></div>
+    </div>
+    <button class="icon-btn" data-act="settings" aria-label="Settings">⚙️</button>
+  </header>
+  <div id="installBanner" class="install" hidden>
+    <span>📲 Install Maqsad on your phone for a full-screen, offline experience.</span>
+    <button data-act="install">Install</button>
+    <button class="ghost" data-act="dismissInstall" aria-label="Dismiss">✕</button>
+  </div>
+  <main id="main"></main>
+</div>
+
+<button class="fab" id="fab" data-act="fab" aria-label="Add">＋</button>
+
+<nav class="tabs" id="tabs">
+  <button data-act="tab" data-tab="today"><span>🏠</span>Today</button>
+  <button data-act="tab" data-tab="goals"><span>🎯</span>Goals</button>
+  <button data-act="tab" data-tab="habits"><span>🔥</span>Habits</button>
+  <button data-act="tab" data-tab="stats"><span>📊</span>Stats</button>
+</nav>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
