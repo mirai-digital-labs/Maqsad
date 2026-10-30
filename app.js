@@ -245,9 +245,20 @@ function viewStats() {
   ${S.habits.length ? `<section class="card"><div class="h2" style="margin-top:0">Habit consistency · last 30 days</div>${S.habits.map(h => { const r = habitRate(h, 30); return `<div class="rate"><span class="n">${esc(h.emoji)} ${esc(h.name)}</span><div class="bar ${r >= 80 ? 'ok' : ''}"><i style="width:${r}%"></i></div><span class="p">${r}%</span></div>`; }).join('')}</section>` : ''}`;
 }
 
+function updateClock() {
+  const helloEl = $('#hello');
+  if (helloEl) helloEl.textContent = greeting();
+  const dateLineEl = $('#dateLine');
+  if (dateLineEl) {
+    const now = new Date();
+    const dateStr = fmtLong(today());
+    const timeStr = now.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true });
+    dateLineEl.innerHTML = `<span>${esc(dateStr)}</span><span class="live-sep">·</span><span class="live-clock"><span class="live-dot"></span>${esc(timeStr)}</span>`;
+  }
+}
+
 function render() {
-  $('#hello').textContent = greeting();
-  $('#dateLine').textContent = fmtLong(today());
+  updateClock();
   $('#main').innerHTML = { today: viewToday, goals: viewGoals, habits: viewHabits, stats: viewStats }[tab]();
   document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
   $('#fab').hidden = tab === 'stats';
@@ -600,7 +611,8 @@ if (!standalone && /iphone|ipad|ipod/i.test(navigator.userAgent) && !localStorag
 if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 // refresh when the day rolls over or the app returns to foreground
 let lastDay = today();
-document.addEventListener('visibilitychange', () => { if (!document.hidden) { if (today() !== lastDay) lastDay = today(); render(); checkReminder(); } });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { updateClock(); if (today() !== lastDay) { lastDay = today(); render(); } checkReminder(); } });
 applyTheme();
 render();
+setInterval(updateClock, 1000);
 })();

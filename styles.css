@@ -17,7 +17,11 @@ input,select,textarea{font:inherit;color:inherit}
 #app{max-width:640px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 16px 16px}
 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .hello{font-size:22px;font-weight:750;letter-spacing:-.02em}
-.date{color:var(--muted);font-size:14px}
+.date{color:var(--muted);font-size:13.5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:2px}
+.live-sep{opacity:.45}
+.live-clock{display:inline-flex;align-items:center;gap:5px;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--ok);display:inline-block;animation:pulseDot 2s infinite ease-in-out}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
 .icon-btn{width:42px;height:42px;border-radius:12px;background:var(--card);box-shadow:var(--shadow);font-size:18px}
 .install{display:flex;gap:8px;align-items:center;background:var(--chip);border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:14px}
 .install span{flex:1}
