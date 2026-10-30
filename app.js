@@ -382,6 +382,9 @@ function settingsSheet() {
     </div>
     <input type="file" id="importFile" accept="application/json" hidden>
     <div class="btns"><button class="btn danger" style="flex:1" data-act="reset">Erase all data</button></div></div>
+  <div class="sec"><label style="font-size:13px;font-weight:600;color:var(--muted)">App Updates & Version</label>
+    <div class="btns"><button class="btn" data-act="reloadApp">🔄 Force Update & Clear Cache</button></div>
+    <p class="note">Forces your browser to fetch the latest version without losing your tasks or habits.</p></div>
   <div class="btns"><button class="btn primary" data-act="close">Done</button></div>`);
   $('#importFile').addEventListener('change', importData);
 }
@@ -442,6 +445,20 @@ const actions = {
   },
   editHabit(d) { habitForm(S.habits.find(h => h.id === d.id)); },
   delHabit(d) { if (confirm('Delete this habit and its history?')) { S.habits = S.habits.filter(h => h.id !== d.id); save(); closeSheet(); render(); } },
+  async reloadApp() {
+    toast('Updating app...');
+    try {
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const r of regs) await r.unregister();
+      }
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        for (const k of keys) await caches.delete(k);
+      }
+    } catch {}
+    window.location.reload();
+  },
   async shareBackup() {
     const jsonStr = JSON.stringify(S, null, 2);
     const fileName = `maqsad-backup-${today()}.json`;

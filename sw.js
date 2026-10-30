@@ -1,5 +1,5 @@
-const VERSION = 'maqsad-v4';
-const ASSETS = ['./', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest',
+const VERSION = 'maqsad-v5';
+const ASSETS = ['./', 'index.html', 'styles.css?v=5', 'app.js?v=5', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
@@ -13,17 +13,21 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Stale-while-revalidate for same-origin GETs; falls back to the app shell offline.
+// Network-first: always fetch fresh assets when online; fallback to cache when offline.
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
   e.respondWith(
-    caches.match(req, { ignoreSearch: true }).then(cached => {
-      const net = fetch(req).then(res => {
-        if (res && res.ok) { const copy = res.clone(); caches.open(VERSION).then(c => c.put(req, copy)); }
-        return res;
-      }).catch(() => cached || (req.mode === 'navigate' ? caches.match('index.html') : undefined));
-      return cached || net;
+    fetch(req).then(res => {
+      if (res && res.ok) {
+        const copy = res.clone();
+        caches.open(VERSION).then(c => c.put(req, copy));
+      }
+      return res;
+    }).catch(() => {
+      return caches.match(req, { ignoreSearch: true }).then(cached => {
+        return cached || (req.mode === 'navigate' ? caches.match('index.html') : undefined);
+      });
     })
   );
 });
